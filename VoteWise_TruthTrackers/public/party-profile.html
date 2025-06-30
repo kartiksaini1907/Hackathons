@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Profile... - VoteWise</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="main-title">VOTEWISE</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" id="main-container">
+            <!-- All dynamic content will be loaded here -->
+            <p style="text-align: center; color: #999999;">Loading party details...</p>
+        </div>
+    </main>
+    
+    <!-- Chatbot Main Script -->
+    <script src="chatbot.js"></script>
+
+    <!-- Page-specific script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const partyId = params.get('party');
+            const mainContainer = document.getElementById('main-container');
+
+            if (!partyId) {
+                mainContainer.innerHTML = '<p>Error: No party specified.</p>';
+                return;
+            }
+
+            fetch(`/api/party/${partyId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    renderPage(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching party data:', error);
+                    mainContainer.innerHTML = '<p>Sorry, could not load data for this party.</p>';
+                });
+        });
+
+        function renderPage(data) {
+            const mainContainer = document.getElementById('main-container');
+            document.title = `${data.name} - VoteWise`;
+
+            // Generate HTML for each dynamic section
+            const headerHTML = `
+                <div class="profile-header">
+                    <img src="${data.logo}" alt="${data.name} Logo" class="party-logo">
+                    <div class="party-info">
+                        <h2 class="party-name">${data.name}</h2>
+                        <p class="party-tagline">${data.tagline}</p>
+                    </div>
+                </div>`;
+            
+            const historyHTML = data.history.map(item => `<li><strong class="year">${item.year}:</strong> ${item.event}</li>`).join('');
+            
+            const manifestoHTML = data.manifesto.map(item => `
+                <div class="manifesto-item">
+                    <div class="icon"><i class="${item.icon}"></i></div>
+                    <h3>${item.title}</h3>
+                    <ul>${item.points.map(point => `<li>${point}</li>`).join('')}</ul>
+                </div>`).join('');
+
+            const promisesHTML = data.promises.map(item => `
+                <li class="promise-item">
+                    <span class="promise-status"><i class="fas ${item.icon}"></i></span>
+                    <p class="promise-text">${item.text}</p>
+                    <span class="promise-tag tag-${item.status}">${item.status.replace('-', ' ')}</span>
+                </li>`).join('');
+
+            const politiciansHTML = data.politicians.map(person => `
+                <a href="politician-profile.html?id=${person.id}" class="politician-card">
+                    <div class="politician-photo" style="background-image: url('${person.photo || 'https://via.placeholder.com/80'}')"></div>
+                    <h4 class="politician-name">${person.name}</h4>
+                    <p class="politician-role">${person.role}</p>
+                </a>`).join('');
+
+            // NEW: Core Ideology HTML
+            const coreIdeologyHTML = data.coreIdeology.map(item => `<li>${item}</li>`).join('');
+
+            // NEW: Economic Stance HTML
+            const economicStanceHTML = data.economicStance.map(item => `<li>${item}</li>`).join('');
+
+            // NEW: Social Media HTML
+            const socialMediaHTML = `
+                <div class="social-media-links">
+                    ${data.socialMedia.facebook ? `<a href="${data.socialMedia.facebook}" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>` : ''}
+                    ${data.socialMedia.twitter ? `<a href="${data.socialMedia.twitter}" target="_blank" class="social-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>` : ''}
+                    ${data.socialMedia.youtube ? `<a href="${data.socialMedia.youtube}" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i> YouTube</a>` : ''}
+                </div>
+            `;
+
+            // Assemble the final page HTML, including new sections
+            mainContainer.innerHTML = `
+                ${headerHTML}
+                <section><h2>History & Ideology</h2><ul class="timeline">${historyHTML}</ul></section>
+                <section><h2>Core Ideology</h2><ul>${coreIdeologyHTML}</ul></section>
+                <section><h2>Economic Stance</h2><ul>${economicStanceHTML}</ul></section>
+                <section><h2>Manifesto Highlights</h2><div class="manifesto-grid">${manifestoHTML}</div></section>
+                <section><h2>Promise Tracker</h2><ul class="promise-list">${promisesHTML}</ul></section>
+                <section><h2>Key Politicians</h2><div class="politician-grid">${politiciansHTML}</div></section>
+                <section><h2>Connect with the Party</h2>${socialMediaHTML}</section>
+                <a href="index.html" class="back-link">← Back to All Parties</a>
+            `;
+        }
+    </script>
+</body>
+</html>

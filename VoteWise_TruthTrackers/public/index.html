@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoteWise - Your AI Guide to Indian Politics</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="main-title">VOTEWISE</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Select a Party to Analyze</h2>
+            <div class="party-grid" id="party-grid-container">
+                <!-- Party cards are dynamically loaded here -->
+                <p style="text-align: center; color: #999999;">Loading parties...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chatbot Main Script -->
+    <script src="chatbot.js"></script>
+    
+    <!-- Page-specific script to load party cards -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('party-grid-container');
+
+            fetch('/api/parties')
+                .then(response => response.json())
+                .then(parties => {
+                    gridContainer.innerHTML = ''; // Clear the loading message
+                    parties.forEach(party => {
+                        const cardHTML = `
+                            <a href="party-profile.html?party=${party.id}" class="party-card-link">
+                                <div class="party-card">
+                                    <div class="card-header">
+                                        <img src="${party.logo}" alt="${party.name} Logo" class="party-logo">
+                                        <div class="party-info">
+                                            <h3 class="party-name">${party.name}</h3>
+                                            <p class="party-tagline">${party.tagline}</p>
+                                        </div>
+                                    </div>
+                                    <div class="party-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-label">Status:</span>
+                                            <span class="status-badge">${party.status}</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">Lok Sabha Seats:</span>
+                                            <span class="stat-value">${party.lokSabhaSeats}</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-buttons">
+                                        <div class="btn btn-details">View Details <i class="fa-solid fa-file-lines"></i></div>
+                                        <div class="btn btn-trust">
+                                            Trust Score: ${party.trustScore}
+                                            <div class="vote-icons">
+                                                <i class="fa-solid fa-thumbs-up"></i>
+                                                <i class="fa-solid fa-thumbs-down"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                        gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching parties:', error);
+                    gridContainer.innerHTML = '<p>Could not load party information. Please try again later.</p>';
+                });
+        });
+    </script>
+</body>
+</html>

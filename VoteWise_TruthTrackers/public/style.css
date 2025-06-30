@@ -1,0 +1,179 @@
+/* ==========================================================================
+   New Orange & Black Theme
+   ========================================================================== */
+
+:root {
+    --background-color: #1a1a1a; /* Very dark grey, softer than pure black */
+    --card-background: #2a2a2a;  /* Slightly lighter dark grey for cards */
+    --border-color: #444444;     /* Subtle border for cards and sections */
+    --text-primary: #f0f0f0;     /* Off-white for main text */
+    --text-secondary: #999999;   /* Muted grey for secondary text */
+    --accent-orange: #f97316;    /* A rich, warm orange */
+    --accent-orange-soft-bg: rgba(249, 115, 22, 0.05); /* For hover/trust score bg */
+}
+
+/* --- Base & Global Styles --- */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    background-image: radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.1), transparent 40%);
+    background-repeat: no-repeat;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+}
+
+/* --- New Header --- */
+header.main-header {
+    padding: 25px 0;
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1.main-title {
+    font-size: 3em;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin: 0;
+    background: linear-gradient(90deg, #ffae75, #f97316);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* --- Homepage Card Styles --- */
+.party-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+.party-card-link { text-decoration: none; color: inherit; }
+.party-card {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    display: flex; flex-direction: column; gap: 20px;
+}
+.party-card-link:hover .party-card {
+    border-color: var(--accent-orange);
+    transform: translateY(-5px);
+}
+.card-header { display: flex; align-items: center; gap: 20px; }
+.party-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: contain; background-color: rgba(0,0,0,0.2); flex-shrink: 0; border: 2px solid var(--border-color); padding: 5px; }
+.party-name { margin: 0 0 5px 0; font-size: 1.3em; font-weight: 700; color: var(--text-primary); }
+.party-tagline { font-size: 0.9em; color: var(--text-secondary); margin: 0; line-height: 1.4; }
+.party-stats { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-top: 1px solid var(--border-color); }
+.stat-label { color: var(--text-secondary); font-weight: 600; }
+.status-badge { background-color: var(--text-secondary); color: var(--background-color); padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; margin-left: 5px; }
+.stat-value { color: var(--text-primary); font-weight: 600; margin-left: 5px; }
+.card-buttons { display: flex; gap: 15px; margin-top: auto; }
+.btn { width: 100%; padding: 12px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 1px solid transparent; }
+.btn-details { background-color: var(--accent-orange); color: #fff; }
+.btn-details:hover { background-color: #fff; color: var(--accent-orange); border-color: var(--accent-orange); }
+.btn-trust { background: var(--accent-orange-soft-bg); color: var(--accent-orange); border-color: rgba(249, 115, 22, 0.3); }
+.vote-icons { display: flex; gap: 8px; margin-left: auto; }
+
+/* --- Profile Page Styles --- */
+section { background: var(--card-background); border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; margin-bottom: 30px; }
+.profile-header { display: flex; align-items: center; gap: 25px; }
+.profile-header .party-logo { width: 100px; height: 100px; padding: 5px; border-width: 3px; }
+.profile-header .party-name { font-size: 2.2em; }
+.timeline { list-style: none; padding: 0; margin-left: 8px; }
+.timeline li { padding-left: 30px; position: relative; border-left: 2px solid var(--border-color); padding-bottom: 25px; }
+.timeline li:last-child { border-left-color: transparent; }
+.timeline li::before { content: ''; width: 14px; height: 14px; border-radius: 50%; background-color: var(--accent-orange); position: absolute; left: -8px; top: 5px; border: 2px solid var(--background-color); }
+.timeline .year { font-weight: 700; font-size: 1.1em; color: var(--accent-orange); }
+.manifesto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.manifesto-item { background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; }
+.manifesto-item .icon { font-size: 1.8em; color: var(--accent-orange); margin-bottom: 10px; }
+.manifesto-item h3 { margin: 0 0 10px 0; font-size: 1.2em; color: var(--text-primary); }
+.manifesto-item ul { padding-left: 20px; margin: 0; color: var(--text-secondary); }
+.promise-list { list-style: none; padding: 0; }
+.promise-item { display: flex; align-items: flex-start; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--border-color); }
+.promise-item:last-child { border-bottom: none; }
+.promise-status { font-size: 1.8em; margin-top: 2px; }
+.promise-status .fa-check-circle { color: #22c55e; }
+.promise-status .fa-times-circle { color: #ef4444; }
+.promise-status .fa-clock-rotate-left { color: #f59e0b; }
+.promise-text { flex-grow: 1; line-height: 1.5; }
+.promise-tag { padding: 5px 10px; border-radius: 12px; font-size: 0.8em; font-weight: 600; color: white; flex-shrink: 0; }
+.tag-fulfilled { background-color: #22c55e; }
+.tag-broken { background-color: #ef4444; }
+.tag-in-progress { background-color: #f59e0b; color: #fff; }
+.politician-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+.politician-card { text-align: center; border: 1px solid var(--border-color); border-radius: 8px; padding: 20px 15px; transition: all 0.2s ease; background: rgba(0,0,0,0.2); text-decoration: none; color: inherit; display: block; }
+.politician-card:hover { transform: translateY(-5px); border-color: var(--accent-orange); }
+.politician-photo { width: 80px; height: 80px; border-radius: 50%; background-color: #333; margin: 0 auto 15px auto; object-fit: cover; background-size: cover; background-position: center; border: 2px solid var(--border-color); }
+.politician-name { font-weight: 600; font-size: 1.1em; margin: 0 0 5px 0; }
+.politician-role { font-size: 0.9em; color: var(--text-secondary); }
+.politician-main-photo { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-orange); }
+.performance-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: center; }
+.stat-card { background-color: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); }
+.stat-card .stat-value { font-size: 2em; font-weight: 700; color: var(--accent-orange); }
+.stat-card .stat-label { font-size: 0.9em; color: var(--text-secondary); }
+.back-link { display: inline-block; padding: 10px 20px; background-color: #444; color: var(--text-primary); text-decoration: none; border-radius: 5px; font-weight: 600; margin-top: 20px; transition: background-color 0.2s; }
+.back-link:hover { background-color: var(--accent-orange); }
+
+/* --- NEW: Social Media Link Styles --- */
+.social-media-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center; /* Center buttons if few */
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-btn i {
+    font-size: 1.2em;
+}
+
+.social-btn.facebook { background-color: #1877F2; }
+.social-btn.twitter { background-color: #1DA1F2; }
+.social-btn.youtube { background-color: #FF0000; }
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 992px) { .party-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { h1.main-title { font-size: 2em; } }

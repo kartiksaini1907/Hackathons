@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Chatbot Widget Styles (New Orange & Black Theme)
+   ========================================================================== */
+
+:root {
+    --chat-accent: #f97316;       /* The same rich orange from the main theme */
+    --chat-bg: #2a2a2a;           /* Dark card background */
+    --chat-bg-lighter: #3a3a3a;   /* Slightly lighter for bot messages */
+    --chat-border: #444444;       /* Subtle border */
+    --chat-text: #f0f0f0;         /* Primary text color */
+}
+
+/* The button that opens the chat window */
+#chatbot-toggle-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--chat-accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    transition: all 0.3s ease;
+}
+
+#chatbot-toggle-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(249, 115, 22, 0.4);
+}
+
+/* The main chat window container */
+#chatbot-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 380px;
+    max-width: 90vw;
+    height: 520px;
+    max-height: 70vh;
+    background-color: var(--chat-bg);
+    border: 1px solid var(--chat-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    
+    /* Initially hidden */
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+}
+
+#chatbot-window.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Header of the chat window */
+#chatbot-header {
+    background: linear-gradient(90deg, #444, #2a2a2a);
+    color: var(--chat-text);
+    padding: 15px 20px;
+    font-weight: 600;
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--chat-border);
+}
+
+#chatbot-header-title { display: flex; align-items: center; gap: 10px; }
+#close-chatbot-btn { background: none; border: none; color: var(--chat-text); font-size: 20px; cursor: pointer; opacity: 0.8; }
+#close-chatbot-btn:hover { opacity: 1; }
+
+/* The area where messages are displayed */
+#chatbot-messages {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #1a1a1a;
+}
+
+/* Styling for individual messages */
+.chat-message {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    max-width: 85%;
+}
+
+.chat-message .content {
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.5;
+    color: var(--chat-text);
+}
+
+/* User's message (sent) */
+.user-message { align-self: flex-end; align-items: flex-end; }
+.user-message .content {
+    background-color: var(--chat-accent);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Bot's message (received) */
+.bot-message { align-self: flex-start; align-items: flex-start; }
+.bot-message .content {
+    background-color: var(--chat-bg-lighter);
+    border-bottom-left-radius: 4px;
+}
+.bot-message.loading .content {
+    font-style: italic;
+    color: #999999;
+}
+
+/* The input area at the bottom */
+#chatbot-input-area {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--chat-border);
+    background-color: var(--chat-bg);
+}
+
+#chatbot-input {
+    flex-grow: 1;
+    border: 1px solid var(--chat-border);
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 1em;
+    outline: none;
+    background: #1a1a1a;
+    color: var(--chat-text);
+}
+
+#chatbot-input::placeholder {
+    color: #999999;
+}
+
+#chatbot-input:focus {
+    border-color: var(--chat-accent);
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
+}
+
+#chatbot-send-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--chat-accent);
+    cursor: pointer;
+    padding: 0 10px;
+    margin-left: 10px;
+    transition: color 0.2s;
+}
+
+#chatbot-send-btn:hover {
+    color: #ffae75;
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Politician... - VoteWise</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="chatbot.css">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <h1 class="main-title">VOTEWISE</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container" id="main-container">
+            <p style="text-align: center; color: #999999;">Loading politician details...</p>
+        </div>
+    </main>
+
+    <!-- Chatbot Main Script -->
+    <script src="chatbot.js"></script>
+
+    <!-- Page-specific script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const politicianId = params.get('id');
+            const mainContainer = document.getElementById('main-container');
+
+            if (!politicianId) {
+                mainContainer.innerHTML = '<p>Error: No politician specified.</p>';
+                return;
+            }
+
+            fetch(`/api/politician/${politicianId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) throw new Error(data.error);
+                    renderPage(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching politician data:', error);
+                    mainContainer.innerHTML = '<p>Sorry, could not load data for this politician.</p>';
+                });
+        });
+
+        function renderPage(data) {
+            const mainContainer = document.getElementById('main-container');
+            document.title = `${data.name} - VoteWise`;
+
+            const headerHTML = `
+                <div class="profile-header">
+                    <img src="${data.photo}" alt="${data.name}" class="politician-main-photo">
+                    <div class="party-info">
+                        <h2 class="party-name">${data.name}</h2>
+                        <p class="party-tagline">${data.role}</p>
+                    </div>
+                </div>`;
+            
+            const performanceHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${data.performance.attendance}</div>
+                    <div class="stat-label">Attendance</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${data.performance.debates}</div>
+                    <div class="stat-label">Debates</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${data.performance.bills}</div>
+                    <div class="stat-label">Private Bills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${data.performance.questions}</div>
+                    <div class="stat-label">Questions Asked</div>
+                </div>`;
+            
+            const controversiesHTML = data.controversies && data.controversies.length > 0
+                ? data.controversies.map(item => `<li><strong class="year">${item.year}:</strong> ${item.event}</li>`).join('')
+                : '<li>No major controversies listed.</li>';
+            
+            // NEW: Political Journey HTML
+            const politicalJourneyHTML = data.politicalJourney.map(item => `<li><strong class="year">${item.year}:</strong> ${item.event}</li>`).join('');
+
+            // NEW: Education HTML
+            const educationHTML = data.education.map(item => `<li><strong>${item.degree}</strong> from ${item.institution}</li>`).join('');
+
+            // NEW: Social Media HTML
+            const socialMediaHTML = `
+                <div class="social-media-links">
+                    ${data.socialMedia.facebook ? `<a href="${data.socialMedia.facebook}" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>` : ''}
+                    ${data.socialMedia.twitter ? `<a href="${data.socialMedia.twitter}" target="_blank" class="social-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>` : ''}
+                    ${data.socialMedia.youtube ? `<a href="${data.socialMedia.youtube}" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i> YouTube</a>` : ''}
+                </div>
+            `;
+
+            // Assemble the final page HTML, including new sections
+            mainContainer.innerHTML = `
+                ${headerHTML}
+                <section><h2>Bio</h2><p>${data.bio}</p></section>
+                <section><h2>Political Journey</h2><ul class="timeline">${politicalJourneyHTML}</ul></section>
+                <section><h2>Education</h2><ul>${educationHTML}</ul></section>
+                <section><h2>Parliament Performance</h2><div class="performance-stats">${performanceHTML}</div></section>
+                <section><h2>Past Controversies</h2><ul class="timeline">${controversiesHTML}</ul></section>
+                <section><h2>Connect with the Politician</h2>${socialMediaHTML}</section>
+                <a href="javascript:history.back()" class="back-link">← Go Back</a>
+            `;
+        }
+    </script>
+</body>
+</html>
